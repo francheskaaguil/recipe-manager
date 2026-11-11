@@ -59,7 +59,38 @@ export function useSavedRecipes() {
   // To prove the rollback works, see "How to prove your rollback works" in the
   // handout. Do NOT just stop json-server — the list unmounts and you will see
   // nothing.
-  const favorite = useMutation({ mutationFn: updateRecipe, onSettled: invalidate });
+  
+const favorite = useMutation({
+  mutationFn: updateRecipe,
+
+  onMutate: async ({ id, favorite }) => {
+    // Cancel any ongoing refetch.
+    await queryClient.cancelQueries({ queryKey: KEY });
+
+    // Save the previous data for rollback.
+    const previous = queryClient.getQueryData<SavedRecipe[]>(KEY);
+
+    // Update the cache immediately.
+    queryClient.setQueryData<SavedRecipe[]>(KEY, (old = []) =>
+  old.map((recipe) =>
+    recipe.id === id
+      ? { ...recipe, favorite: favorite ?? recipe.favorite }
+      : recipe,
+  ),
+);
+
+    return { previous };
+  },
+
+  // Restore previous data if the request fails.
+  onError: (_error, _variables, context) => {
+    queryClient.setQueryData(KEY, context?.previous);
+  },
+
+  // Refetch after success or failure.
+  onSettled: invalidate,
+});
+
 
   const saved = query.data ?? [];
 
