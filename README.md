@@ -1,4 +1,4 @@
-# Live demo: pending Vercel deployment
+https://recipe-manager-six-rust.vercel.app
 
 ![Recipe Manager search results](./ma3-screenshot.png)
 
