@@ -39,3 +39,11 @@ export async function getCategories(): Promise<string[]> {
     (category) => category.strCategory,
   );
 }
+
+export async function getMealById(mealId: string): Promise<Recipe | null> {
+  const response = await mealdb.get<SearchResponse>("/lookup.php", {
+    params: { i: mealId },
+  });
+  const [meal] = response.data.meals ?? [];
+  return meal ? toRecipe(meal) : null;
+}
