@@ -16,7 +16,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     inputRef.current?.focus();
   }, []);
 
-  // React.FormEvent, not `any`. The compiler knows what preventDefault is.
+  // React.FormEvent keeps the submit event correctly typed.
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmed = term.trim();

@@ -15,6 +15,22 @@ A recipe management application built with React, TypeScript, Tailwind CSS, and 
 - Store saved recipes using JSON Server.
 - Fetch and cache data using TanStack React Query.
 
+## Query Keys and Cache
+
+Search results use `["meals", term]` because each search term is a different
+request and needs its own cache entry; categories use `["categories"]`, and the
+saved collection uses `["recipes"]`. This lets returning to an earlier search
+reuse its matching results, while successful recipe writes invalidate
+`["recipes"]` so the collection is refetched from json-server.
+
+## Optimistic Favorite Rollback
+
+The favorite button updates immediately. If the PATCH fails, the previous
+cached recipe list is restored and then refetched. This screenshot captures the
+star filled before a delayed 404 response rolled the change back:
+
+![Optimistic favorite update before rollback](./favorite-rollback.png)
+
 ## Technologies Used
 
 - React 19
