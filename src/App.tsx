@@ -46,13 +46,6 @@ const visible =
           </p>
         </header>
 
-        <div className="alert alert-info">
-          <span>
-            Starter template. The saved list and Delete already work — everything
-            else is a TODO. Delete this alert before you submit.
-          </span>
-        </div>
-
         <SearchBar onSearch={setTerm} />
 
         <section className="space-y-3">
